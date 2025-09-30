@@ -2,10 +2,40 @@ from .app import app
 from flask import render_template, request
 from monApp.models import Auteur
 from monApp.models import Livre
+from monApp.forms import FormAuteur
+from flask import url_for , redirect
+from .app import db
+
+
+@app.route('/auteur/save/', methods=("POST",))
+def saveAuteur():
+    updatedAuteur = None
+    unForm = FormAuteur()
+    # recherche de l'auteur à modifier
+    idA = int(unForm.idA.data)
+    updatedAuteur = Auteur.query.get(idA)
+    # si les données saisies sont valides pour la mise à jour
+    if unForm.validate_on_submit():
+        updatedAuteur.Nom = unForm.Nom.data
+        db.session.commit()
+        return redirect(url_for('viewAuteur', idA=updatedAuteur.idA))
+    return render_template("auteur_update.html", selectedAuteur=updatedAuteur, updateForm=unForm)
+
+@app.route('/auteurs/<idA>/view/')
+def viewAuteur(idA):
+    unAuteur = Auteur.query.get(idA)
+    unForm = FormAuteur (idA=unAuteur.idA , Nom=unAuteur.Nom)
+    return render_template("auteur_view.html",selectedAuteur=unAuteur, viewForm=unForm)
 
 @app.route('/about/')
 def about():
     return render_template("about.html",title ="R3.01 Dev Web avec Flask",name= app.config['ABOUT']) 
+
+@app.route('/auteurs/<idA>/update/')
+def updateAuteur(idA):
+    unAuteur = Auteur.query.get(idA)
+    unForm = FormAuteur(idA=unAuteur.idA , Nom=unAuteur.Nom)
+    return render_template("auteur_update.html",selectedAuteur=unAuteur, updateForm=unForm)
 
 @app.route('/contact/')  
 def contact(): 
