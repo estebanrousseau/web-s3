@@ -3,9 +3,46 @@ from flask import render_template, request
 from monApp.models import Auteur
 from monApp.models import Livre
 from monApp.forms import FormAuteur
+from monApp.forms import FormLivre
 from flask import url_for , redirect
 from .app import db
 
+@app.route('/auteur/')
+def createAuteur():
+    unForm = FormAuteur()
+    return render_template("auteur_create.html", createForm=unForm)
+
+
+@app.route('/auteurs/<idA>/delete/')
+def deleteAuteur(idA):
+    unAuteur = Auteur.query.get(idA)
+    unForm = FormAuteur(idA=unAuteur.idA, Nom=unAuteur.Nom)
+    return render_template("auteur_delete.html",selectedAuteur=unAuteur, deleteForm=unForm)
+
+@app.route('/auteur/erase/', methods=("POST",))
+def eraseAuteur():
+    deletedAuteur = None
+    unForm = FormAuteur()
+    # recherche de l'auteur à supprimer
+    idA = int(unForm.idA.data)
+    deletedAuteur = Auteur.query.get(idA)
+    # suppression
+    db.session.delete(deletedAuteur)
+    db.session.commit()
+    return redirect(url_for('getAuteurs'))
+
+
+@app.route('/auteur/insert/', methods=("POST",))
+def insertAuteur():
+    insertedAuteur = None
+    unForm = FormAuteur()
+    if unForm.validate_on_submit():
+        insertedAuteur = Auteur(Nom=unForm.Nom.data)
+        db.session.add(insertedAuteur)
+        db.session.commit()
+        insertedId = insertedAuteur.idA
+        return redirect(url_for('viewAuteur', idA=insertedId))
+    return render_template("auteur_create.html", createForm=unForm)
 
 @app.route('/auteur/save/', methods=("POST",))
 def saveAuteur():
@@ -21,11 +58,13 @@ def saveAuteur():
         return redirect(url_for('viewAuteur', idA=updatedAuteur.idA))
     return render_template("auteur_update.html", selectedAuteur=updatedAuteur, updateForm=unForm)
 
+
 @app.route('/auteurs/<idA>/view/')
 def viewAuteur(idA):
     unAuteur = Auteur.query.get(idA)
     unForm = FormAuteur (idA=unAuteur.idA , Nom=unAuteur.Nom)
     return render_template("auteur_view.html",selectedAuteur=unAuteur, viewForm=unForm)
+
 
 @app.route('/about/')
 def about():
@@ -36,6 +75,7 @@ def updateAuteur(idA):
     unAuteur = Auteur.query.get(idA)
     unForm = FormAuteur(idA=unAuteur.idA , Nom=unAuteur.Nom)
     return render_template("auteur_update.html",selectedAuteur=unAuteur, updateForm=unForm)
+
 
 @app.route('/contact/')  
 def contact(): 
@@ -62,7 +102,17 @@ def getLivres():
     lesLivres = Livre.query.all()
     return render_template('livre_list.html', title="R3.01 Dev Web avec Flask", livres=lesLivres)
 
+@app.route('/livres/<Idl>/view/')
+def viewLivre(Idl):
+    unLivre = Livre.query.get(Idl)
+    unForm = FormLivre(Idl= unLivre.Idl , Titre = unLivre.Idl)
+    return render_template("livre_view.html",selectedLivre=unLivre, viewForm=unForm)    
 
+@app.route('/livres/<Idl>/update/')
+def updateLivre(Idl):
+    unLivre = Livre.query.get(Idl)
+    unForm = FormLivre(Idl= unLivre.Idl , Titre = unLivre.Idl)
+    return render_template("livre_update.html",selectedAuteur=unLivre, updateForm=unForm)
 
 
 

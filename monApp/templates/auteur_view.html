@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block main %}
     <h1>Consultation de l'auteur {{ selectedAuteur.Nom }}</h1>
-    <form role="form" method="POST" action="">
+    <form method="POST" action="">
         {{ viewForm.hidden_tag() }}
         <div class="form-group mb-3">
             {{ viewForm.Nom.label }}

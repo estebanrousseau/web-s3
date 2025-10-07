@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block main %}
-    <h1>Modification de l'auteur {{ selectedAuteur.Nom }}</h1>
-    <form method="POST" action="{{ url_for('saveAuteur') }}">
+    <h1>Modification du livre {{ selectedLivre.Titre }}</h1>
+    <form role="form" method="POST" action="{{ url_for('saveLivre') }}">
         {{ updateForm.hidden_tag() }}
         <div
             {% if updateForm.Nom.errors %}
@@ -10,10 +10,10 @@
                 class="form-group mb-3"
             {% endif %}
         >
-            {{ updateForm.Nom.label }}
-            {{ updateForm.Nom(size=50, class_="form-control") }}
+            {{ updateForm.Titre.label }}
+            {{ updateForm.Titre(size=50, class_="form-control") }}
         </div>
-        {% if updateForm.Nom.errors %}
+        {% if updateForm.Titre.errors %}
             <ul class="list-group">
                 {% for e in updateForm.Nom.errors %}
                     <li class="list-group-item list-group-item-danger">{{ e }}</li>
@@ -21,6 +21,6 @@
             </ul>
         {% endif %}
         <input class="btn btn-success" type="submit" value="Enregistrer">
-        <a href="{{ url_for('getAuteurs') }}" class="btn btn-secondary">Retour</a>
+        <a href="{{ url_for('getLivres') }}" class="btn btn-secondary">Retour</a>
     </form>
 {% endblock %}

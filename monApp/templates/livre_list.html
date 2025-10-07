@@ -13,6 +13,7 @@
                 <th>Url</th>
                 <th>premiere de couverture</th>
                 <th>auteur</th>
+                <th>action possible</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +24,20 @@
                     <td>{{ unLivre.Url}}</td>
                     <td><img src="{{ url_for('static', filename='images/' + unLivre.Img) }}" alt="Couverture de {{ unLivre.Titre }}"></td>
                     <td>{{ unLivre.auteur}}</td>
+                    <td>
+                        <div class="task-controls">
+                            <a href="{{ url_for('viewLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
+                                Voir <i class="fas fa-eye"></i>
+                            </a>   
+                            
+                            <a href="{{ url_for('updateLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
+                                Voir <i class="fas fa-eye"></i>
+                            </a>    
+
+                        </div>
+
+                        
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
