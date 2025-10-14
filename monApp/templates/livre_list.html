@@ -26,14 +26,15 @@
                     <td>{{ unLivre.auteur}}</td>
                     <td>
                         <div class="task-controls">
-                            <a href="{{ url_for('viewLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
-                                Voir <i class="fas fa-eye"></i>
-                            </a>   
-                            
-                            <a href="{{ url_for('updateLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
-                                Voir <i class="fas fa-eye"></i>
-                            </a>    
-
+                            {% if current_user.is_authenticated %}
+                                <a href="{{ url_for('viewLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
+                                    Voir <i class="fas fa-eye"></i>
+                                </a>   
+                                
+                                <a href="{{ url_for('updateLivre', Idl=unLivre.Idl) }}" class="btn btn-nfo">
+                                    Voir <i class="fas fa-eye"></i>
+                                </a>    
+                            {% endif %} 
                         </div>
 
                         
