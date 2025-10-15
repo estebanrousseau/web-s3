@@ -15,6 +15,11 @@ def testapp():
         auteur = Auteur(Nom="Victor Hugo")
         db.session.add(auteur)
         db.session.commit()
+
+        livre = livre(10, "Harry pot de fleur", "url de fou", "", 4)
+        db.session.add(livre)
+        db.session.commit()
+        
     yield app
     # Cleanup après les tests
     with app.app_context():

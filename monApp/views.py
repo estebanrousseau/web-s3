@@ -112,7 +112,7 @@ def getLivres():
 @login_required
 def viewLivre(Idl):
     unLivre = Livre.query.get(Idl)
-    unForm = FormLivre(Idl= unLivre.Idl , Titre = unLivre.Idl)
+    unForm = FormLivre(Idl= unLivre.Idl , Titre = unLivre.Idl, Prix = unLivre.Prix)
     return render_template("livre_view.html",selectedLivre=unLivre, viewForm=unForm)    
 
 @app.route('/livres/<Idl>/update/')
@@ -120,7 +120,24 @@ def viewLivre(Idl):
 def updateLivre(Idl):
     unLivre = Livre.query.get(Idl)
     unForm = FormLivre(Idl= unLivre.Idl , Titre = unLivre.Idl)
-    return render_template("livre_update.html",selectedAuteur=unLivre, updateForm=unForm)
+    return render_template("livre_update.html",selectedLivre=unLivre, updateForm=unForm)
+
+
+@app.route('/livres/save/', methods=("POST",))
+def saveLivre():
+    selectedLivre = None
+    unForm = FormLivre()
+    Idl = int(unForm.Idl.data)
+    selectedLivre = Livre.query.get(Idl)
+    # si les données saisies sont valides pour la mise à jour
+    if unForm.validate_on_submit():
+        selectedLivre.Titre = unForm.Titre.data
+        db.session.commit()
+        return redirect(url_for('viewLivre', Idl=selectedLivre.Idl))
+    return render_template("livre_update.html", selectedAuteur=selectedLivre, updateForm=unForm)
+
+
+
 
 @app.route("/login/", methods=("GET", "POST"))
 def login():

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField
+from wtforms import DecimalField, StringField, HiddenField
 from wtforms.validators import DataRequired
 from wtforms import PasswordField
 from . models import User
@@ -12,6 +12,7 @@ class FormAuteur(FlaskForm):
 class FormLivre(FlaskForm):
     Idl =  HiddenField('Idl')
     Titre = StringField('Titre', validators =[DataRequired()])
+    Prix = DecimalField('Prix', validators = [DataRequired()])
 
 class LoginForm(FlaskForm):
     Login = StringField('Identifiant')
